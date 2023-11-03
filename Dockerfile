@@ -16,7 +16,7 @@ RUN mvn package
 FROM eclipse-temurin:17-jre-alpine
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
-COPY --from=builder /usr/src/myapp/target/app.jar .
+COPY --from=builder /usr/target/java-container-azure.jar .
 
 EXPOSE 8123
 ENTRYPOINT ["java", "-jar", "./java-container-azure.jar"]
