@@ -1,21 +1,9 @@
-# Stage 1 (to create a "build" image, ~360MB)
-FROM eclipse-temurin:17-jdk-alpine AS builder
-# smoke test to verify if java is available
-RUN java -version
-
-COPY . /usr/src/myapp/
-WORKDIR /usr/src/myapp/
-RUN set -Eeux \
-    && apk --no-cache add maven \
-    # smoke test to verify if maven is available
-    && mvn --version
-RUN mvn package
-
-# Stage 2 (to create a downsized "container executable", ~180MB)
-FROM eclipse-temurin:17-jre-alpine
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /usr/src/myapp/target/java-container-azure.jar
-
-EXPOSE 8123
-ENTRYPOINT ["java", "-jar", "./java-container-azure.jar"]
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+ARG JAVA_OPTS
+ENV JAVA_OPTS=$JAVA_OPTS
+COPY target/AzureDeployement-0.0.1-SNAPSHOT.jar azuredeployement.jar
+EXPOSE 8080
+ENTRYPOINT exec java $JAVA_OPTS -jar azuredeployement.jar
+# For Spring-Boot project, use the entrypoint below to reduce Tomcat startup time.
+#ENTRYPOINT exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar azuredeployement.jar
