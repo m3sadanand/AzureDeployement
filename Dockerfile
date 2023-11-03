@@ -4,8 +4,8 @@ FROM eclipse-temurin:17-jdk-alpine AS builder
 # smoke test to verify if java is available
 RUN java -version
 
-COPY . /usr/src/myapp/target
-WORKDIR /usr/src/myapp/target
+COPY . /usr/src/myapp/
+WORKDIR /usr/src/myapp/
 RUN set -Eeux \
     && apk --no-cache add maven \
     # smoke test to verify if maven is available
