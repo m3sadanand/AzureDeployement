@@ -2,7 +2,7 @@ FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 ARG JAVA_OPTS
 ENV JAVA_OPTS=$JAVA_OPTS
-COPY /target/AzureDeployement-0.0.1-SNAPSHOT.jar /azuredeployement.jar
+COPY /home/runner/work/AzureDeployement/AzureDeployement/target/java-container-azure.jar.original /azuredeployement.jar
 EXPOSE 8080
 ENTRYPOINT exec java $JAVA_OPTS -jar azuredeployement.jar
 # For Spring-Boot project, use the entrypoint below to reduce Tomcat startup time.
