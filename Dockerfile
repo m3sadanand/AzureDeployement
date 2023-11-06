@@ -1,9 +1,17 @@
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ARG JAVA_OPTS
-ENV JAVA_OPTS=$JAVA_OPTS
-COPY /home/runner/work/AzureDeployement/AzureDeployement/target/java-container-azure.jar /azuredeployement.jar
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:11
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Build the application
+RUN mvn clean install
+
+# Make port 8080 available to the world outside this container
 EXPOSE 8080
-ENTRYPOINT exec java $JAVA_OPTS -jar azuredeployement.jar
-# For Spring-Boot project, use the entrypoint below to reduce Tomcat startup time.
-#ENTRYPOINT exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar azuredeployement.jar
+
+# Define the command to run your application
+CMD ["java", "-jar", "target/azuredeployement.jar"]
